@@ -1,11 +1,72 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import FlipCard from '../components/FlipCard.astro';
+import { getRandomWords } from '../utils/utils';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const words = await getRandomWords(10);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="HSK2 Flashcards">
+	<header class="title-container">
+		<h1>
+			<span class="title-decoration">〜</span>
+			HSK2 Flashcards
+			<span class="title-decoration">〜</span>
+		</h1>
+	</header>
+	<main class="container">
+		<div class="cards-grid">
+			{words.map((word) => (
+				<FlipCard word={word} />
+			))}
+		</div>
+	</main>
 </Layout>
+
+<style>
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem;
+	}
+
+	.title-container {
+		text-align: center;
+		margin: 3rem auto 4rem;
+    margin-bottom: 0;
+		padding: 0 1rem;
+	}
+
+	h1 {
+		color: var(--chinese-red);
+		font-size: 2.8rem;
+		font-weight: 500;
+		letter-spacing: 0.1em;
+		margin-bottom: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+	}
+
+	.title-decoration {
+		color: var(--chinese-gold);
+		font-size: 2rem;
+		opacity: 0.8;
+	}
+
+	.subtitle {
+		color: var(--chinese-red);
+		font-size: 1.2rem;
+		opacity: 0.8;
+		letter-spacing: 0.2em;
+		margin-top: 0.5rem;
+	}
+
+	.cards-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		gap: 1.5rem;
+		padding: 1rem;
+	}
+</style>
