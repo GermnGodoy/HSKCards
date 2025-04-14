@@ -7,21 +7,22 @@ interface Word {
   english: string;
 }
 
-function readCSV(filePath: string): Word[] {
-  const fileContent = readFileSync(filePath, 'utf-8');
-  const records = parse(fileContent, {
-    columns: ['chinese', 'pinyin', 'english'],
-    skip_empty_lines: true,
-    relax_quotes: true,
-    relax_column_count: true,
-    trim: true
-  });
-  return records;
+async function readCSV(filePath: string): Promise<Word[]> {
+  const response = await fetch(filePath);
+  const text = await response.text();
+  
+  return text
+    .trim()
+    .split('\n')
+    .map(line => {
+      const [chinese, pinyin, english] = line.split(',');
+      return { chinese, pinyin, english: english.replace(/"/g, '') };
+    });
 }
 
 export async function getRandomWords(count: number): Promise<Word[]> {
-  const hsk1Words = readCSV('public/hsk1.csv');
-  const hsk2Words = readCSV('public/hsk2.csv');
+  const hsk1Words = await readCSV('https://raw.githubusercontent.com/plaktos/hsk_csv/refs/heads/master/hsk1.csv');
+  const hsk2Words = await readCSV('https://raw.githubusercontent.com/plaktos/hsk_csv/refs/heads/master/hsk2.csv');
   const allWords = [...hsk1Words, ...hsk2Words];
   
   // Shuffle the array and take the first 'count' elements
