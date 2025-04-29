@@ -1,5 +1,8 @@
 import type { APIRoute } from 'astro';
 
+// Mark this route as server-side only
+export const prerender = false;
+
 interface Word {
   chinese: string;
   pinyin: string;
@@ -50,7 +53,9 @@ export const GET: APIRoute = async ({ url }) => {
         headers: {
           'Content-Type': 'application/json',
           // Prevent caching to ensure we get fresh random results each time
-          'Cache-Control': 'no-cache, no-store, must-revalidate'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         }
       }
     );
@@ -58,7 +63,13 @@ export const GET: APIRoute = async ({ url }) => {
     console.error('Error fetching random words:', error);
     return new Response(
       JSON.stringify({ error: 'Failed to fetch random words' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      { 
+        status: 500, 
+        headers: { 
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
+        } 
+      }
     );
   }
 }; 
