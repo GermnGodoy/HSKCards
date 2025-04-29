@@ -29,6 +29,19 @@ const { word } = Astro.props;
     height: 200px;
     perspective: 1000px;
     cursor: pointer;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .flip-card {
+      height: 180px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .flip-card {
+      height: 160px;
+    }
   }
 
   .flip-card-inner {
@@ -92,11 +105,38 @@ const { word } = Astro.props;
   h2 {
     font-size: 2.5rem;
     margin: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 2.2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h2 {
+      font-size: 1.8rem;
+    }
+    
+    .flip-card-front, .flip-card-back {
+      padding: 0.75rem;
+    }
   }
 
   p {
     margin: 0.5rem 0;
     font-size: 1.2rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  @media (max-width: 480px) {
+    p {
+      font-size: 1rem;
+      margin: 0.3rem 0;
+    }
   }
 </style>
 
@@ -108,7 +148,7 @@ const { word } = Astro.props;
       clickCount++;
       const pinyin = card.querySelector('.pinyin');
       
-      if (clickCount === 1) {
+      if (clickCount === 1 && pinyin) {
         // First click: Show pinyin
         pinyin.classList.remove('hidden');
       } else if (clickCount === 2) {
@@ -116,8 +156,11 @@ const { word } = Astro.props;
         card.classList.add('flipped');
       } else {
         // Third click: Reset
-        clickCount = 1;
+        clickCount = 0;
         card.classList.remove('flipped');
+        if (pinyin) {
+          pinyin.classList.add('hidden');
+        }
       }
     });
   });
