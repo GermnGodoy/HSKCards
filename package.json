@@ -10,6 +10,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/node": "^7.0.4",
     "astro": "^4.0.0",
     "csv-parse": "^5.5.3"
   },

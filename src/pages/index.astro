@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import FlipCard from '../components/FlipCard.astro';
 import { getRandomWords } from '../utils/utils';
 
+// This will be executed on each request in server mode
 const words = await getRandomWords(10);
 ---
 
@@ -19,6 +20,9 @@ const words = await getRandomWords(10);
 			{words.map((word) => (
 				<FlipCard word={word} />
 			))}
+		</div>
+		<div class="refresh-button-container">
+			<button id="refresh-btn" class="refresh-button">New Words</button>
 		</div>
 	</main>
 </Layout>
@@ -76,6 +80,34 @@ const words = await getRandomWords(10);
 		padding: 0.5rem;
 	}
 
+	.refresh-button-container {
+		display: flex;
+		justify-content: center;
+		margin: 2rem 0 1rem;
+	}
+
+	.refresh-button {
+		background-color: var(--chinese-red);
+		color: white;
+		border: none;
+		padding: 0.8rem 1.5rem;
+		font-size: 1rem;
+		font-weight: 500;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 0.3s, transform 0.2s;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.refresh-button:hover {
+		background-color: #a50000;
+		transform: translateY(-2px);
+	}
+
+	.refresh-button:active {
+		transform: translateY(0);
+	}
+
 	@media (max-width: 768px) {
 		.cards-grid {
 			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -92,3 +124,9 @@ const words = await getRandomWords(10);
 		}
 	}
 </style>
+
+<script>
+	document.getElementById('refresh-btn')?.addEventListener('click', () => {
+		window.location.reload();
+	});
+</script>
